@@ -12,3 +12,8 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.hover-email:hover {
+    color: #9f7aea; /* Change color on hover */
+    cursor: pointer;
+}

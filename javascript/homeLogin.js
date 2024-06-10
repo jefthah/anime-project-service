@@ -27,7 +27,7 @@ async function fetchTopAnime() {
                 <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold">${anime.title}</h3>
-                    <a href="detailAnimeGuest.html?id=${anime.mal_id}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
+                    <a href="detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
                 </div>
             `;
             animeCardsContainer.appendChild(card);
@@ -55,7 +55,7 @@ async function fetchLatestAnime() {
                 <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold">${anime.title}</h3>
-                    <a href="detailAnimeGuest.html?id=${anime.mal_id}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
+                    <a href="detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
                 </div>
             `;
             latestCardsContainer.appendChild(card);
@@ -67,41 +67,27 @@ async function fetchLatestAnime() {
     }
 }
 
-async function fetchAnimeNews() {
-    const loadingElement = document.getElementById('loading-news');
-    const newsCardsContainer = document.getElementById('news-cards');
-    
-    try {
-        // Assuming you are fetching news for a specific anime ID, e.g., ID = 1
-        const animeId = 1;
-        const response = await fetch(`https://api.jikan.moe/v4/anime/${animeId}/news`);
-        const data = await response.json();
-        const newsItems = data.data.slice(0, 10); // Get the first 10 news items
+function getQueryParams() {
+    const params = {};
+    window.location.search.replace(/^\?/, '').split('&').forEach(param => {
+        const [key, value] = param.split('=');
+        params[key] = decodeURIComponent(value);
+    });
+    return params;
+}
 
-        newsItems.forEach(news => {
-            const card = document.createElement('div');
-            card.classList.add('bg-gray-800', 'rounded-lg', 'p-4', 'shadow-lg', 'flex', 'space-x-4');
-            card.innerHTML = `
-                <img src="${news.images.jpg.image_url}" alt="${news.title}" class="w-24 h-24 object-cover flex-shrink-0">
-                <div class="flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-semibold">${news.title}</h3>
-                        <p class="text-gray-400">${news.date}</p>
-                        <p class="text-gray-400">${news.excerpt}</p>
-                    </div>
-                    <a href="${news.url}" target="_blank" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Read More</a>
-                </div>
-            `;
-            newsCardsContainer.appendChild(card);
-        });
-    } catch (error) {
-        console.error('Error fetching anime news:', error);
-    } finally {
-        loadingElement.style.display = 'none';
+function updateUserEmail() {
+    const params = getQueryParams();
+    const email = params.email || localStorage.getItem('email');
+    if (email) {
+        localStorage.setItem('email', email); // Save email to localStorage
+        const userEmailElement = document.getElementById('user-email');
+        const mobileUserEmailElement = document.getElementById('mobile-user-email');
+        userEmailElement.textContent = email;
+        mobileUserEmailElement.textContent = email;
     }
 }
 
-fetchAnimeNews();
-
 fetchTopAnime();
 fetchLatestAnime();
+updateUserEmail();

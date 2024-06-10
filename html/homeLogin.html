@@ -25,7 +25,13 @@
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Home</a> <!-- Larger link text -->
                 <a href="news.html" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Larger link text -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
-                <a href="login.html" class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a> <!-- Larger button text -->
+                <div class="relative group">
+                    <span id="user-email" class="hover-email text-white text-lg"></span> <!-- Display email as text -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="../html/login.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
             </div>
             <div class="md:hidden flex items-center">
                 <button id="menu-button" class="text-white focus:outline-none">
@@ -41,7 +47,13 @@
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Larger link text -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Larger link text -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
-                <a href="#" class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a> <!-- Larger button text -->
+                <div class="relative group">
+                    <span id="mobile-user-email" class="hover-email text-white text-lg"></span> <!-- Display email as text -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -67,6 +79,6 @@
         </div>
     </div>
 
-    <script src="/javascript/scripts.js"></script>
+    <script src="/javascript/homeLogin.js"></script>
 </body>
 </html>
