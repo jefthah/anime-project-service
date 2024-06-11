@@ -1,5 +1,6 @@
 document.getElementById('signup-form').addEventListener('submit', async function(event) {
     event.preventDefault(); // Prevent form from submitting the default way
+    const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
@@ -18,19 +19,27 @@ document.getElementById('signup-form').addEventListener('submit', async function
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username, email, password })
         });
 
         const result = await response.json();
 
-        notification.textContent = result.message;
         notification.classList.remove('text-green-500', 'text-red-500');
-        if (response.ok && !result.error) {
+
+        if (response.status === 200) {
+            notification.textContent = 'Akun berhasil dibuat';
             notification.classList.add('text-green-500');
             setTimeout(() => {
                 window.location.href = './login.html';
-            }, 0); // Redirect after 0 seconds
+            }, 2000); // Redirect after 2 seconds
+        } else if (response.status === 400) {
+            notification.textContent = 'Email atau password belum diisi';
+            notification.classList.add('text-red-500');
+        } else if (response.status === 409) {
+            notification.textContent = 'Email telah terdaftar';
+            notification.classList.add('text-red-500');
         } else {
+            notification.textContent = result.message || 'Terjadi kesalahan koneksi';
             notification.classList.add('text-red-500');
         }
     } catch (error) {

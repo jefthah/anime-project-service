@@ -3,10 +3,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const animeId = params.get('id');
     const email = params.get('email');
 
+    // Fungsi untuk memperbarui email pengguna di navbar
+    function updateUserEmail() {
+        const email = localStorage.getItem('email');
+        if (email) {
+            const userEmailElement = document.getElementById('user-email');
+            const mobileUserEmailElement = document.getElementById('mobile-user-email');
+            userEmailElement.textContent = email;
+            mobileUserEmailElement.textContent = email;
+        }
+    }
+
     if (email) {
         localStorage.setItem('email', email);
         document.getElementById('home-link').href = `homeLogin.html?email=${email}`;
+    } else {
+        const storedEmail = localStorage.getItem('email');
+        if (storedEmail) {
+            document.getElementById('home-link').href = `homeLogin.html?email=${storedEmail}`;
+        }
     }
+
+    updateUserEmail();
 
     if (!animeId) {
         console.error('No anime ID found in URL');
@@ -15,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Atur link Write Reviews dengan parameter
     const writeReviewLink = document.getElementById('write-review-link');
-    writeReviewLink.href = `../html/reviewPage.html?id=${animeId}&email=${email}`;
+    writeReviewLink.href = `../html/reviewPage.html?id=${animeId}&email=${email || localStorage.getItem('email')}`;
 
     // Fetch Anime Details
     fetch(`https://api.jikan.moe/v4/anime/${animeId}`)
@@ -55,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.innerHTML = `
                     <img src="${relatedAnime.images.jpg.image_url}" alt="${relatedAnime.title}" class="w-full h-48 object-cover">
                     <div class="p-4">
-                        <a href="detailAnime.html?id=${relatedAnime.mal_id}&email=${email}" class="text-xl font-semibold text-blue-400 hover:text-blue-600">${relatedAnime.title}</a>
+                        <a href="detailAnime.html?id=${relatedAnime.mal_id}&email=${email || localStorage.getItem('email')}" class="text-xl font-semibold text-blue-400 hover:text-blue-600">${relatedAnime.title}</a>
                         <p class="mt-2">Rating: ${relatedAnime.score || 'N/A'}</p>
                     </div>
                 `;
@@ -65,4 +83,58 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error fetching anime details:', error);
         });
+
+    // Fetch and Display Reviews
+    const token = localStorage.getItem('auth_token'); // Ambil token dari localStorage
+    console.log('Token digunakan untuk mengambil reviews:', token); // Debug log token
+
+    fetch(`https://mylistanime-api.vercel.app/animes/${animeId}/reviews`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Tambahkan header Authorization
+        }
+    })
+    .then(response => {
+        console.log('Fetch reviews response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(reviews => {
+        console.log('Reviews fetched:', reviews);
+        const reviewsContainer = document.getElementById('anime-reviews');
+        if (reviews.length === 0) {
+            reviewsContainer.innerHTML = '<p>No reviews available.</p>';
+            return;
+        }
+        reviews.forEach(review => {
+            const reviewElement = document.createElement('div');
+            reviewElement.classList.add('bg-gray-800', 'p-4', 'rounded-lg', 'shadow-lg');
+            reviewElement.innerHTML = `
+                <h3 class="text-xl font-semibold">${review.title}</h3>
+                <p class="mt-2">${review.review}</p>
+                <p class="mt-2">Rating: ${review.rating}</p>
+            `;
+            reviewsContainer.appendChild(reviewElement);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching reviews:', error);
+        document.getElementById('anime-reviews').innerHTML = '<p>Failed to fetch reviews.</p>';
+    });
+});
+
+document.getElementById('menu-button').addEventListener('click', function() {
+    var menu = document.getElementById('mobile-menu');
+    if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.style.maxHeight = menu.scrollHeight + 'px';
+    } else {
+        menu.style.maxHeight = '0';
+        menu.addEventListener('transitionend', function() {
+            menu.classList.add('hidden');
+        }, { once: true });
+    }
 });

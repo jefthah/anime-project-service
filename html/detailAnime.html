@@ -23,8 +23,15 @@
             <div class="hidden md:flex items-center space-x-4">
                 <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Larger placeholder text -->
                 <a id="home-link" href="homeLogin.html" class="text-white hover:text-gray-400 text-lg">Home</a> <!-- Larger link text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Larger link text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
+                <a href="genre.html" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Larger link text -->
+                <a href="myList.html" class="text-white hover:text-gray-400 text-lg">My List</a> <!-- Larger link text -->
+                <div class="relative group">
+                    <span id="user-email" class="hover-email text-white text-lg"></span> <!-- Display email as text -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="../html/login.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
             </div>
             <div class="md:hidden flex items-center">
                 <button id="menu-button" class="text-white focus:outline-none">
@@ -40,6 +47,13 @@
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Larger link text -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Larger link text -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
+                <div class="relative group">
+                    <span id="mobile-user-email" class="hover-email text-white text-lg"></span> <!-- Display email as text -->
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>

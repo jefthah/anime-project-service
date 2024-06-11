@@ -12,16 +12,6 @@ function togglePasswordVisibility() {
     }
 }
 
-function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-
 document.getElementById('login-form').addEventListener('submit', async function(event) {
     event.preventDefault(); // Mencegah form dari submit secara default
     const email = document.getElementById('email').value;
@@ -39,14 +29,28 @@ document.getElementById('login-form').addEventListener('submit', async function(
         const result = await response.json();
 
         if (response.ok && !result.error) {
-            // Simpan token ke cookie
-            setCookie('auth_token', result.token, 7); // Simpan selama 7 hari
-            // Redirect ke homeLogin.html dengan email di query params
-            window.location.href = `../html/homeLogin.html?email=${encodeURIComponent(result.loginResult.email)}`;
+            // Debug: periksa respons dari server
+            console.log('Respons login:', result);
+
+            // Simpan token ke localStorage
+            const token = result.loginResult.token;
+            localStorage.setItem('auth_token', token);
+
+            // Debug: periksa apakah token disimpan
+            const storedToken = localStorage.getItem('auth_token');
+            console.log('Token disimpan di localStorage:', storedToken);
+            
+            if (storedToken !== token) {
+                console.error('Token yang disimpan tidak sesuai dengan token yang diterima dari API');
+            }
+
+            // Redirect ke homeLogin.html dengan username di query params
+            window.location.href = `../html/homeLogin.html?username=${encodeURIComponent(result.loginResult.username)}`;
         } else {
             alert(result.message || 'Login gagal');
         }
     } catch (error) {
+        console.error('Kesalahan saat login:', error);
         alert('Terjadi kesalahan koneksi');
     }
 });
