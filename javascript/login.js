@@ -12,6 +12,16 @@ function togglePasswordVisibility() {
     }
 }
 
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
 document.getElementById('login-form').addEventListener('submit', async function(event) {
     event.preventDefault(); // Mencegah form dari submit secara default
     const email = document.getElementById('email').value;
@@ -29,7 +39,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
         const result = await response.json();
 
         if (response.ok && !result.error) {
-            // Redirect ke index.html dengan email di query params
+            // Simpan token ke cookie
+            setCookie('auth_token', result.token, 7); // Simpan selama 7 hari
+            // Redirect ke homeLogin.html dengan email di query params
             window.location.href = `../html/homeLogin.html?email=${encodeURIComponent(result.loginResult.email)}`;
         } else {
             alert(result.message || 'Login gagal');
