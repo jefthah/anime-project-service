@@ -67,6 +67,36 @@ async function fetchLatestAnime() {
     }
 }
 
+async function fetchLatestReviews() {
+    const loadingElement = document.getElementById('loading-review');
+    const reviewCardsContainer = document.getElementById('review-cards');
+    
+    try {
+        const response = await fetch('https://mylistanime-api.vercel.app/animes/reviews');
+        const data = await response.json();
+        const latestReviews = data.slice(0, 8);
+
+        latestReviews.forEach(review => {
+            const card = document.createElement('div');
+            card.classList.add('flex', 'items-start', 'space-x-4', 'bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg', 'p-4');
+            card.innerHTML = `
+                <img src="${review.image}" alt="${review.title}" class="w-24 h-24 object-cover flex-shrink-0">
+                <div>
+                    <h3 class="text-xl font-semibold">${review.title}</h3>
+                    <p class="mt-1 text-gray-400">Rating: ${review.rating}</p>
+                    <p class="mt-2">${review.review}</p>
+                    <p class="mt-2 text-blue-400">username: ${review.user.username}</p>
+                </div>
+            `;
+            reviewCardsContainer.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error fetching latest review data:', error);
+    } finally {
+        loadingElement.style.display = 'none';
+    }
+}
+
 function getQueryParams() {
     const params = {};
     window.location.search.replace(/^\?/, '').split('&').forEach(param => {
@@ -80,7 +110,7 @@ function updateUserEmail() {
     const params = getQueryParams();
     const email = params.email || localStorage.getItem('email');
     if (email) {
-        localStorage.setItem('email', email); // Save email to localStorage
+        localStorage.setItem('email', email); // Simpan email ke localStorage jika ada di query params
         const userEmailElement = document.getElementById('user-email');
         const mobileUserEmailElement = document.getElementById('mobile-user-email');
         userEmailElement.textContent = email;
@@ -88,6 +118,10 @@ function updateUserEmail() {
     }
 }
 
-fetchTopAnime();
-fetchLatestAnime();
-updateUserEmail();
+document.addEventListener('DOMContentLoaded', () => {
+    fetchTopAnime();
+    fetchLatestAnime();
+    fetchLatestReviews();
+    updateUserEmail();
+});
+

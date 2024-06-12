@@ -11,7 +11,6 @@ function togglePasswordVisibility() {
         eyeIcon.classList.add('fa-eye');
     }
 }
-
 document.getElementById('login-form').addEventListener('submit', async function(event) {
     event.preventDefault(); // Mencegah form dari submit secara default
     const email = document.getElementById('email').value;
@@ -29,23 +28,13 @@ document.getElementById('login-form').addEventListener('submit', async function(
         const result = await response.json();
 
         if (response.ok && !result.error) {
-            // Debug: periksa respons dari server
-            console.log('Respons login:', result);
-
-            // Simpan token ke localStorage
+            // Simpan token dan email ke localStorage
             const token = result.loginResult.token;
             localStorage.setItem('auth_token', token);
+            localStorage.setItem('email', email); // Simpan email ke localStorage
 
-            // Debug: periksa apakah token disimpan
-            const storedToken = localStorage.getItem('auth_token');
-            console.log('Token disimpan di localStorage:', storedToken);
-            
-            if (storedToken !== token) {
-                console.error('Token yang disimpan tidak sesuai dengan token yang diterima dari API');
-            }
-
-            // Redirect ke homeLogin.html dengan username di query params
-            window.location.href = `../html/homeLogin.html?username=${encodeURIComponent(result.loginResult.username)}`;
+            // Redirect ke homeLogin.html
+            window.location.href = `../html/homeLogin.html?email=${encodeURIComponent(email)}`;
         } else {
             alert(result.message || 'Login gagal');
         }

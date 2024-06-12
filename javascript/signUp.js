@@ -4,12 +4,13 @@ document.getElementById('signup-form').addEventListener('submit', async function
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
-    const notification = document.getElementById('notification');
 
     if (password !== confirmPassword) {
-        notification.textContent = 'Password dan Konfirmasi Password tidak cocok';
-        notification.classList.remove('text-green-500');
-        notification.classList.add('text-red-500');
+        Swal.fire({
+            icon: 'error',
+            title: 'Password Tidak Cocok',
+            text: 'Password dan Konfirmasi Password tidak cocok',
+        });
         return;
     }
 
@@ -24,28 +25,41 @@ document.getElementById('signup-form').addEventListener('submit', async function
 
         const result = await response.json();
 
-        notification.classList.remove('text-green-500', 'text-red-500');
-
         if (response.status === 200) {
-            notification.textContent = 'Akun berhasil dibuat';
-            notification.classList.add('text-green-500');
-            setTimeout(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Akun berhasil dibuat',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
                 window.location.href = './login.html';
-            }, 2000); // Redirect after 2 seconds
+            });
         } else if (response.status === 400) {
-            notification.textContent = 'Email atau password belum diisi';
-            notification.classList.add('text-red-500');
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan',
+                text: 'Email atau password belum diisi',
+            });
         } else if (response.status === 409) {
-            notification.textContent = 'Email telah terdaftar';
-            notification.classList.add('text-red-500');
+            Swal.fire({
+                icon: 'error',
+                title: 'Email Terdaftar',
+                text: 'Email telah terdaftar',
+            });
         } else {
-            notification.textContent = result.message || 'Terjadi kesalahan koneksi';
-            notification.classList.add('text-red-500');
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan',
+                text: result.message || 'Terjadi kesalahan koneksi',
+            });
         }
     } catch (error) {
-        notification.textContent = 'Terjadi kesalahan koneksi';
-        notification.classList.remove('text-green-500');
-        notification.classList.add('text-red-500');
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: 'Terjadi kesalahan koneksi',
+        });
     }
 });
 

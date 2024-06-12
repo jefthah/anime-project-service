@@ -13,7 +13,7 @@
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <div class="flex items-center">
-                    <img src="/images/Logo Without Background.png" alt="Logo" class="h-20 w-15"> <!-- Larger logo -->
+                    <img src="/images/Logo Without Background.png" alt="Logo" class="h-20 w-15"> <!-- Logo lebih besar -->
                 </div>
                 <div class="flex flex-col">
                     <span class="text-3xl font-semibold">My Anime List</span>
@@ -21,12 +21,12 @@
                 </div>
             </div>
             <div class="hidden md:flex items-center space-x-4">
-                <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Larger placeholder text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Home</a> <!-- Larger link text -->
-                <a href="genre.html" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Larger link text -->
-                <a href="myList.html" class="text-white hover:text-gray-400 text-lg">My List</a> <!-- Larger link text -->
+                <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
+                <a href="#" class="text-white hover:text-gray-400 text-lg">Home</a> <!-- Teks link lebih besar -->
+                <a href="genre.html" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Teks link lebih besar -->
+                <a href="myList.html" class="text-white hover:text-gray-400 text-lg">My List</a> <!-- Teks link lebih besar -->
                 <div class="relative group">
-                    <span id="user-email" class="hover-email text-white text-lg"></span> <!-- Display email as text -->
+                    <span id="user-email" class="hover-email text-white text-lg"></span> <!-- Menampilkan email sebagai teks -->
                     <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
                         <a href="../html/login.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
@@ -43,12 +43,12 @@
         </div>
         <div id="mobile-menu" class="md:hidden hidden overflow-hidden max-h-0 transition-max-height duration-300 ease-out">
             <div class="flex flex-col space-y-2 mt-2">
-                <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Larger placeholder text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Larger link text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Larger link text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
+                <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
+                <a href="#" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Teks link lebih besar -->
+                <a href="#" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Teks link lebih besar -->
+                <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Teks link lebih besar -->
                 <div class="relative group">
-                    <span id="mobile-user-email" class="hover-email text-white text-lg"></span> <!-- Display email as text -->
+                    <span id="mobile-user-email" class="hover-email text-white text-lg"></span> <!-- Menampilkan email sebagai teks -->
                     <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
@@ -58,23 +58,32 @@
         </div>
     </nav>
 
-    <!-- Cards Layout -->
+    <!-- Tata Letak Kartu -->
     <div class="container mx-auto p-4">
         <h2 class="text-2xl font-bold m-4 ">Top Anime</h2>
         <div id="anime-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <!-- Cards will be dynamically inserted here -->
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
         </div>
-        <!-- Loading Spinner -->
+        <!-- Pemintal Loading -->
         <div id="loading-top-anime" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>
 
         <h2 class="text-2xl font-bold mt-20 m-4">Latest Updates</h2>
         <div id="latest-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            <!-- Cards will be dynamically inserted here -->
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
         </div>
-        <!-- Loading Spinner -->
+        <!-- Pemintal Loading -->
         <div id="loading-latest" class="flex justify-center items-center h-24">
+            <div class="spinner"></div>
+        </div>
+
+        <h2 class="text-2xl font-bold mt-20 m-4">Latest Reviews</h2>
+        <div id="review-cards" class="space-y-4">
+            <!-- Kartu review akan dimasukkan secara dinamis di sini -->
+        </div>
+        <!-- Pemintal Loading -->
+        <div id="loading-review" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>
     </div>
