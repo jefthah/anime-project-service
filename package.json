@@ -2,7 +2,7 @@
   "devDependencies": {
     "tailwindcss": "^3.4.3"
   },
-  "name": "1",
+  "name": "anime-project-service",
   "version": "1.0.0",
   "main": "index.html",
   "dependencies": {
