@@ -11,6 +11,56 @@ document.getElementById('menu-button').addEventListener('click', function() {
     }
 });
 
+document.getElementById('search-input').addEventListener('input', function() {
+    const query = this.value.trim();
+    if (query.length > 2) {
+        performSearch(query);
+    } else {
+        clearSearchResults();
+    }
+});
+
+document.getElementById('mobile-search-input').addEventListener('input', function() {
+    const query = this.value.trim();
+    if (query.length > 2) {
+        performSearch(query);
+    } else {
+        clearSearchResults();
+    }
+});
+
+function performSearch(query) {
+    // Fetch search results from the API and display them in a dropdown
+    fetch(`https://api.jikan.moe/v4/anime?q=${query}&limit=10`)
+        .then(response => response.json())
+        .then(data => {
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = ''; // Clear previous results
+
+            data.data.forEach(anime => {
+                const resultItem = document.createElement('a');
+                resultItem.href = `detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}`;
+                resultItem.classList.add('p-2', 'hover:bg-gray-200', 'cursor-pointer', 'flex', 'items-center');
+                resultItem.innerHTML = `
+                    <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-12 h-12 object-cover inline-block mr-2">
+                    <span>${anime.title}</span>
+                `;
+                searchResults.appendChild(resultItem);
+            });
+
+            searchResults.classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error fetching search results:', error);
+        });
+}
+
+function clearSearchResults() {
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = '';
+    searchResults.classList.add('hidden');
+}
+
 async function fetchTopAnime() {
     const loadingElement = document.getElementById('loading-top-anime');
     const animeCardsContainer = document.getElementById('anime-cards');
@@ -22,14 +72,16 @@ async function fetchTopAnime() {
 
         top8Anime.forEach(anime => {
             const card = document.createElement('div');
-            card.classList.add('bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
+            card.classList.add('bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg', 'cursor-pointer');
             card.innerHTML = `
                 <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold">${anime.title}</h3>
-                    <a href="detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
                 </div>
             `;
+            card.addEventListener('click', () => {
+                window.location.href = `detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}`;
+            });
             animeCardsContainer.appendChild(card);
         });
     } catch (error) {
@@ -50,14 +102,16 @@ async function fetchLatestAnime() {
 
         latest8Anime.forEach(anime => {
             const card = document.createElement('div');
-            card.classList.add('bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
+            card.classList.add('bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg', 'cursor-pointer');
             card.innerHTML = `
                 <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold">${anime.title}</h3>
-                    <a href="detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
                 </div>
             `;
+            card.addEventListener('click', () => {
+                window.location.href = `detailAnime.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}`;
+            });
             latestCardsContainer.appendChild(card);
         });
     } catch (error) {
@@ -67,16 +121,15 @@ async function fetchLatestAnime() {
     }
 }
 
-async function fetchLatestReviews() {
+async function fetchLatestReviews(page = 1) {
     const loadingElement = document.getElementById('loading-review');
     const reviewCardsContainer = document.getElementById('review-cards');
     
     try {
-        const response = await fetch('https://mylistanime-api.vercel.app/animes/reviews');
+        const response = await fetch(`https://mylistanime-api.vercel.app/animes/reviews?page=${page}`);
         const data = await response.json();
-        const latestReviews = data.slice(0, 8);
 
-        latestReviews.forEach(review => {
+        data.forEach(review => {
             const card = document.createElement('div');
             card.classList.add('flex', 'items-start', 'space-x-4', 'bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg', 'p-4');
             card.innerHTML = `
@@ -88,8 +141,20 @@ async function fetchLatestReviews() {
                     <p class="mt-2 text-blue-400">username: ${review.user.username}</p>
                 </div>
             `;
-            reviewCardsContainer.appendChild(card);
+            reviewCardsContainer.prepend(card); // Prepend the card to the container
         });
+        
+        if (data.length > 0) {
+            // If there are more reviews to load, add a button to load more
+            const loadMoreButton = document.createElement('button');
+            loadMoreButton.textContent = 'Load More Reviews';
+            loadMoreButton.classList.add('mt-4', 'bg-purple-600', 'text-white', 'px-4', 'py-2', 'rounded', 'hover:bg-purple-700');
+            loadMoreButton.addEventListener('click', () => {
+                loadMoreButton.remove();
+                fetchLatestReviews(page + 1);
+            });
+            reviewCardsContainer.appendChild(loadMoreButton);
+        }
     } catch (error) {
         console.error('Error fetching latest review data:', error);
     } finally {
@@ -124,4 +189,3 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLatestReviews();
     updateUserEmail();
 });
-

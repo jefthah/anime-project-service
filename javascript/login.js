@@ -11,6 +11,7 @@ function togglePasswordVisibility() {
         eyeIcon.classList.add('fa-eye');
     }
 }
+
 document.getElementById('login-form').addEventListener('submit', async function(event) {
     event.preventDefault(); // Mencegah form dari submit secara default
     const email = document.getElementById('email').value;
@@ -34,12 +35,28 @@ document.getElementById('login-form').addEventListener('submit', async function(
             localStorage.setItem('email', email); // Simpan email ke localStorage
 
             // Redirect ke homeLogin.html
-            window.location.href = `../html/homeLogin.html?email=${encodeURIComponent(email)}`;
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil!',
+                text: 'Anda akan diarahkan ke halaman utama.',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = `../html/homeLogin.html?email=${encodeURIComponent(email)}`;
+            });
         } else {
-            alert(result.message || 'Login gagal');
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Gagal',
+                text: result.message || 'Email atau password salah',
+            });
         }
     } catch (error) {
         console.error('Kesalahan saat login:', error);
-        alert('Terjadi kesalahan koneksi');
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: 'Terjadi kesalahan koneksi',
+        });
     }
 });

@@ -25,7 +25,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
 
         const result = await response.json();
 
-        if (response.status === 200) {
+        if (response.ok) { // Menggunakan response.ok untuk memeriksa status keberhasilan
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
