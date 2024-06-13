@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem('auth_token'); // Ambil token dari localStorage
-    console.log('Token digunakan untuk mengambil daftar anime:', token); // Debug log token
+    const token = localStorage.getItem('auth_token'); // Get token from localStorage
+    console.log('Token used to fetch anime list:', token); // Debug log token
+
+    // Show loader
+    const loader = document.getElementById('loader');
+    loader.style.display = 'flex';
 
     fetch('https://mylistanime-api.vercel.app/animes', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Tambahkan header Authorization
+            'Authorization': `Bearer ${token}` // Add Authorization header
         }
     })
     .then(response => {
@@ -19,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(animes => {
         console.log('Anime list fetched:', animes);
         const animeListContainer = document.getElementById('anime-list');
+        // Hide loader
+        loader.style.display = 'none';
+
         animes.forEach(anime => {
             const card = document.createElement('div');
             card.classList.add('bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
@@ -33,15 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="mt-2">Year: ${anime.year}</p>
                 </div>
             `;
-            animeListContainer.appendChild(card);
+            animeListContainer.prepend(card); // Prepend the card to the container
         });
     })
     .catch(error => {
         console.error('Error fetching anime list:', error);
+        // Hide loader
+        loader.style.display = 'none';
         document.getElementById('anime-list').innerHTML = '<p>Failed to fetch anime list.</p>';
     });
 
-    // Fungsi untuk mendapatkan query parameter
+    // Function to get query parameters
     function getQueryParams() {
         const params = {};
         window.location.search.replace(/^\?/, '').split('&').forEach(param => {
@@ -51,12 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return params;
     }
 
-    // Fungsi untuk memperbarui email pengguna di navbar
+    // Function to update user email in the navbar
     function updateUserEmail() {
         const params = getQueryParams();
         const email = params.email || localStorage.getItem('email');
         if (email) {
-            localStorage.setItem('email', email); // Simpan email ke localStorage
+            localStorage.setItem('email', email); // Save email to localStorage
             const userEmailElement = document.getElementById('user-email');
             const mobileUserEmailElement = document.getElementById('mobile-user-email');
             userEmailElement.textContent = email;

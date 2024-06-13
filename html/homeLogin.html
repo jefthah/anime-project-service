@@ -20,8 +20,9 @@
                     <span class="text-sm text-center">AnimeRating</span>
                 </div>
             </div>
-            <div class="hidden md:flex items-center space-x-4">
-                <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
+            <div class="hidden md:flex items-center space-x-4 relative">
+                <input id="search-input" type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
+                <div id="search-results" class="absolute bg-white text-black rounded w-full mt-12 max-h-96 overflow-y-auto hidden"></div>
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Home</a> <!-- Teks link lebih besar -->
                 <a href="genre.html" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Teks link lebih besar -->
                 <a href="myList.html" class="text-white hover:text-gray-400 text-lg">My List</a> <!-- Teks link lebih besar -->
@@ -43,7 +44,7 @@
         </div>
         <div id="mobile-menu" class="md:hidden hidden overflow-hidden max-h-0 transition-max-height duration-300 ease-out">
             <div class="flex flex-col space-y-2 mt-2">
-                <input type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
+                <input id="mobile-search-input" type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Teks link lebih besar -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Teks link lebih besar -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Teks link lebih besar -->
@@ -64,7 +65,7 @@
         <div id="anime-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <!-- Kartu akan dimasukkan secara dinamis di sini -->
         </div>
-        <!-- Pemintal Loading -->
+        <!-- Pemintar Loading -->
         <div id="loading-top-anime" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>
@@ -73,7 +74,7 @@
         <div id="latest-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <!-- Kartu akan dimasukkan secara dinamis di sini -->
         </div>
-        <!-- Pemintal Loading -->
+        <!-- Pemintar Loading -->
         <div id="loading-latest" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>
@@ -82,7 +83,7 @@
         <div id="review-cards" class="space-y-4">
             <!-- Kartu review akan dimasukkan secara dinamis di sini -->
         </div>
-        <!-- Pemintal Loading -->
+        <!-- Pemintar Loading -->
         <div id="loading-review" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>

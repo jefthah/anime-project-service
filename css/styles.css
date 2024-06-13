@@ -17,3 +17,50 @@
     color: #9f7aea; /* Change color on hover */
     cursor: pointer;
 }
+
+/* Loader styles */
+.loader {
+    border-top-color: #3498db;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hover email styles */
+.hover-email:hover {
+    color: #9f7aea; /* Change color on hover */
+    cursor: pointer;
+}
+#search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin-top: 0.5rem; /* Add some space below the input */
+    z-index: 10; /* Ensure it stays above other elements */
+    background-color: #1a202c; /* Dark background to match website theme */
+    color: white; /* White text color for readability */
+}
+#search-results a {
+    display: block;
+    padding: 0.5rem;
+    color: white; /* White text color for readability */
+}
+#search-results a:hover {
+    background-color: #2d3748; /* Slightly lighter dark color on hover */
+}
+.hover-email {
+    cursor: pointer;
+}
+.group:hover .opacity-0 {
+    opacity: 1;
+}
+.group:hover .max-h-0 {
+    max-height: 20rem;
+}
+.relative-search-container {
+    position: relative;
+}

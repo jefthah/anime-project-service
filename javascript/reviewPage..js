@@ -42,7 +42,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             const reviewRating = reviewRatingElement.value;
 
             if (reviewText === '' || reviewRating === '') {
-                alert('Mohon isi teks ulasan dan rating');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Input Tidak Lengkap',
+                    text: 'Mohon isi teks ulasan dan rating',
+                });
                 return;
             }
 
@@ -55,7 +59,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             try {
                 const token = localStorage.getItem('auth_token');
                 if (!token) {
-                    alert('Anda tidak memiliki izin. Silakan login kembali.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Tidak Berizin',
+                        text: 'Anda tidak memiliki izin. Silakan login kembali.',
+                    });
                     return;
                 }
 
@@ -78,18 +86,37 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 if (reviewResponse.ok) {
                     const result = JSON.parse(responseBody);
-                    alert('Review berhasil ditambahkan!');
-                    window.location.href = `detailAnime.html?id=${animeId}&username=${username}`;
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Review Berhasil!',
+                        text: 'Review berhasil ditambahkan!',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = `detailAnime.html?id=${animeId}&username=${username}`;
+                    });
                 } else if (reviewResponse.status === 401) {
                     console.error('Error submitting review: Unauthorized');
-                    alert('Gagal mengirim review. Anda tidak memiliki izin.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Mengirim Review',
+                        text: 'Anda tidak memiliki izin.',
+                    });
                 } else {
                     console.error('Error submitting review:', responseBody);
-                    alert('Gagal mengirim review. Silakan coba lagi.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Mengirim Review',
+                        text: 'Gagal mengirim review. Silakan coba lagi.',
+                    });
                 }
             } catch (error) {
                 console.error('Error submitting review:', error);
-                alert('Terjadi kesalahan. Silakan coba lagi.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    text: 'Terjadi kesalahan. Silakan coba lagi.',
+                });
             }
         });
     } catch (error) {
