@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,50 +8,67 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+
 <body class="bg-gray-900 text-white">
     <!-- Navbar -->
     <nav class="bg-gray-800 p-4">
-        <div class="container mx-auto flex items-center justify-between">
+        <div class="container-md mx-4 mx-md-8 flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <div class="flex items-center">
-                    <img src="/images/Logo Without Background.png" alt="Logo" class="h-20 w-15"> <!-- Logo lebih besar -->
+                    <img src="/images/Logo Without Background.png" alt="Logo" class="h-20 w-15">
+                    <!-- Logo lebih besar -->
                 </div>
                 <div class="flex flex-col">
                     <span class="text-3xl font-semibold">My Anime List</span>
                     <span class="text-sm text-center">AnimeRating</span>
                 </div>
             </div>
-            <div class="hidden md:flex items-center space-x-4 relative">
-                <input id="search-input" type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
-                <div id="search-results" class="absolute bg-white text-black rounded w-full mt-12 max-h-96 overflow-y-auto hidden"></div>
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Home</a> <!-- Teks link lebih besar -->
-                <a href="genre.html" class="text-white hover:text-gray-400 text-lg">Genre</a> <!-- Teks link lebih besar -->
-                <a href="myList.html" class="text-white hover:text-gray-400 text-lg">My List</a> <!-- Teks link lebih besar -->
+            <div class="hidden lg:flex items-center space-x-4 relative">
+                <input id="search-input" type="text" placeholder="Search"
+                    class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg">
+                <!-- Placeholder text lebih besar -->
+                <div id="search-results"
+                    class="absolute bg-white text-black rounded w-full mt-12 max-h-96 overflow-y-auto hidden"></div>
+                <span class="text-gray-400 hover:text-gray-500 text-lg cursor-pointer">Home</span>
+                <a href="genre.html" class="text-white hover:text-gray-400 text-lg">Genre</a>
+                <!-- Teks link lebih besar -->
+                <a href="myList.html" class="text-white hover:text-gray-400 text-lg">My List</a>
+                <!-- Teks link lebih besar -->
                 <div class="relative group">
-                    <span id="user-email" class="hover-email text-white text-lg"></span> <!-- Menampilkan email sebagai teks -->
-                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-                        <a href="../html/login.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    <span id="user-email" class="hover-email text-white text-lg"></span>
+                    <!-- Menampilkan email sebagai teks -->
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a href="/html/profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a id="logoutButton" href="../html/login.html"
+                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
                     </div>
                 </div>
             </div>
             <div class="md:hidden flex items-center">
                 <button id="menu-button" class="text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="md:hidden hidden overflow-hidden max-h-0 transition-max-height duration-300 ease-out">
+        <div id="mobile-menu"
+            class="md:hidden hidden overflow-hidden max-h-0 transition-max-height duration-300 ease-out">
             <div class="flex flex-col space-y-2 mt-2">
-                <input id="mobile-search-input" type="text" placeholder="Search" class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg"> <!-- Placeholder text lebih besar -->
+                <input id="mobile-search-input" type="text" placeholder="Search"
+                    class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg">
+                <!-- Placeholder text lebih besar -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Teks link lebih besar -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Teks link lebih besar -->
                 <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Teks link lebih besar -->
                 <div class="relative group">
-                    <span id="mobile-user-email" class="hover-email text-white text-lg"></span> <!-- Menampilkan email sebagai teks -->
-                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <span id="mobile-user-email" class="hover-email text-white text-lg"></span>
+                    <!-- Menampilkan email sebagai teks -->
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
                     </div>
@@ -91,4 +109,5 @@
 
     <script src="/javascript/homeLogin.js"></script>
 </body>
+
 </html>

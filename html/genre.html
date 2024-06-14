@@ -4,34 +4,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime News</title>
+    <title>Genre</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4A5568;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
 </head>
 
 <body class="bg-gray-900 text-white">
     <!-- Navbar -->
     <nav class="bg-gray-800 p-4">
-        <div class="container mx-auto flex items-center justify-between">
+        <div class="container-md mx-4 mx-md-8 flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <div class="flex items-center">
-                    <a href="index.html"><img src="/images/Logo Without Background.png" alt="Logo"
-                            class="h-20 w-15"></a> <!-- Larger logo -->
+                    <img src="/images/logo.png" alt="Logo" class="h-20 w-15"> <!-- Larger logo -->
                 </div>
                 <div class="flex flex-col">
                     <span class="text-3xl font-semibold">My Anime List</span>
                     <span class="text-sm text-center">AnimeRating</span>
                 </div>
             </div>
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="homeLogin.html" class="text-white hover:text-gray-400 text-lg">Anime</a>
-                <!-- Larger link text -->
-                <a href="news.html" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Larger link text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
-                <a href="#" class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a>
-                <!-- Larger button text -->
+            <div class="hidden lg:flex items-center space-x-4 relative">
+                <input id="search-input" type="text" placeholder="Search"
+                    class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg">
+                <!-- Placeholder text lebih besar -->
+                <div id="search-results"
+                    class="absolute bg-white text-black rounded w-full mt-12 max-h-96 overflow-y-auto hidden"></div>
+                <a id="home-link" href="#" class="text-white hover:text-gray-400 text-lg">Home</a>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        // Ambil elemen link Home
+                        var homeLink = document.getElementById('home-link');
+                        // Ambil elemen user-email
+                        var userEmail = document.getElementById('user-email');
+
+                        // Status email
+                        var hasEmail = userEmail.innerText.trim();
+
+                        // Jika ada email, arahkan ke homeLogin.html, jika tidak, arahkan ke index.html
+                        homeLink.href = hasEmail ? "../html/homeLogin.html" : "../index.html";
+                    });
+                </script>
+                <span class="text-gray-400 hover:text-gray-500 text-lg cursor-pointer">Genre</span>
+                <a href="/html/myList.html" class="text-white hover:text-gray-400 text-lg">My List</a>
+
+                <!-- Bagian email dan sign in navbar-->
+                <div class="relative group">
+                    <span id="user-email" class="hover-email text-white text-lg"></span>
+                    <!-- Menampilkan email sebagai teks -->
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a id="profile-link" href="/html/profile.html"
+                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100 hidden">Profile</a>
+                        <a id="logout-link" href="../html/login.html"
+                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100 hidden">Logout</a>
+                    </div>
+                </div>
+                <a id="sign-in-link" href="/html/login.html"
+                    class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a>
+
+                <!-- Script untuk mengatur tampilan berdasarkan data email -->
+                <script>
+                    // Setelah pengguna berhasil login
+                    const email = localStorage.getItem('email');
+                    if (email) {
+                        // Tampilkan email pada navbar atau di mana pun Anda ingin menampilkannya
+                        document.getElementById('user-email').textContent = email;
+                        // Tampilkan menu Profile dan Logout
+                        document.getElementById('profile-link').classList.remove('hidden');
+                        document.getElementById('logout-link').classList.remove('hidden');
+                        // Sembunyikan tombol Sign In
+                        document.getElementById('sign-in-link').classList.add('hidden');
+                    }
+                </script>
+
+
+
+
+
             </div>
-            <div class="md:hidden flex items-center">
+            <div class="lg:hidden flex items-center">
                 <button id="menu-button" class="text-white focus:outline-none">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -44,131 +113,125 @@
         <div id="mobile-menu"
             class="md:hidden hidden overflow-hidden max-h-0 transition-max-height duration-300 ease-out">
             <div class="flex flex-col space-y-2 mt-2">
-                <a href="index.html" class="text-white hover:text-gray-400 text-lg">Anime</a> <!-- Larger link text -->
-                <a href="news.html" class="text-white hover:text-gray-400 text-lg">News</a> <!-- Larger link text -->
-                <a href="#" class="text-white hover:text-gray-400 text-lg">Movies</a> <!-- Larger link text -->
-                <a href="#" class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a>
-                <!-- Larger button text -->
+                <input id="mobile-search-input" type="text" placeholder="Search"
+                    class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg">
+                <!-- Placeholder text lebih besar -->
+                <a href="../html/homeLogin.html" class="text-white hover:text-gray-400 text-lg">Home</a>
+                <span class="text-gray-400 hover:text-gray-500 text-lg cursor-pointer">Genre</span>
+                <a href="/html/myList.html" class="text-white hover:text-gray-400 text-lg">My List</a>
+                <a id="sign-in-link" href="/html/login.html"
+                    class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a>
+                <div id="user-email-container" class="hidden relative group">
+                    <span id="user-email" class="hover-email text-white text-lg"></span>
+                    <div
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- News Layout -->
+
+    <!--COMPONENT-->
+
+    <!-- Tata Letak Kartu -->
     <div class="container mx-auto p-4">
-        <h2 class="text-2xl font-bold mt-8 m-4">Anime News</h2>
-        <div id="news-cards" class="grid grid-cols-1 gap-4">
-            <!-- News cards will be dynamically inserted here -->
+        <h1 class="text-4xl text-center font-bold m-4 ">Genre</h1>
+
+
+        <h2 class="text-2xl font-bold m-4">Slice of Life</h2>
+        <div class="overflow-x-auto py-4">
+            <div id="sol-cards" class="flex space-x-4 snap-x snap-mandatory">
+                <!-- Kartu akan dimasukkan secara dinamis di sini -->
+                <div class="flex-shrink-0 w-64 h-96 bg-white rounded-lg shadow-md snap-start">
+                    <img src="https://via.placeholder.com/150" alt="Anime Image"
+                        class="rounded-t-lg w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold">Anime Title</h3>
+                        <p class="text-gray-600">Some description about the anime.</p>
+                    </div>
+                </div>
+                <!-- Kartu akan dimasukkan secara dinamis di sini -->
+                <div class="flex-shrink-0 w-64 h-96 bg-white rounded-lg shadow-md snap-start">
+                    <img src="https://via.placeholder.com/150" alt="Anime Image"
+                        class="rounded-t-lg w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold">Anime Title</h3>
+                        <p class="text-gray-600">Some description about the anime.</p>
+                    </div>
+                </div>
+                <!-- Kartu akan dimasukkan secara dinamis di sini -->
+                <div class="flex-shrink-0 w-64 h-96 bg-white rounded-lg shadow-md snap-start">
+                    <img src="https://via.placeholder.com/150" alt="Anime Image"
+                        class="rounded-t-lg w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold">Anime Title</h3>
+                        <p class="text-gray-600">Some description about the anime.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Loading Spinner -->
-        <div id="loading-news" class="flex justify-center items-center h-24">
+
+        <!-- Pemintar Loading -->
+        <div id="loading-sol-anime" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>
+
+        <h2 class="text-2xl font-bold m-4 ">Isekai</h2>
+        <div id="isekai-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
+        </div>
+        <!-- Pemintar Loading -->
+        <div id="loading-isekai-anime" class="flex justify-center items-center h-24">
+            <div class="spinner"></div>
+        </div>
+
+        <h2 class="text-2xl font-bold m-4 ">Romance</h2>
+        <div id="romance-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
+        </div>
+        <!-- Pemintar Loading -->
+        <div id="loading-romance-anime" class="flex justify-center items-center h-24">
+            <div class="spinner"></div>
+        </div>
+
+        <h2 class="text-2xl font-bold m-4 ">Adventure</h2>
+        <div id="adventure-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
+        </div>
+        <!-- Pemintar Loading -->
+        <div id="loading-adventure-anime" class="flex justify-center items-center h-24">
+            <div class="spinner"></div>
+        </div>
+
+        <h2 class="text-2xl font-bold m-4 ">Horror</h2>
+        <div id="horror-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
+        </div>
+        <!-- Pemintar Loading -->
+        <div id="loading-horror-anime" class="flex justify-center items-center h-24">
+            <div class="spinner"></div>
+        </div>
+
+        <h2 class="text-2xl font-bold m-4 ">Olahraga</h2>
+        <div id="olahraga-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <!-- Kartu akan dimasukkan secara dinamis di sini -->
+        </div>
+        <!-- Pemintar Loading -->
+        <div id="loading-olahraga-anime" class="flex justify-center items-center h-24">
+            <div class="spinner"></div>
+        </div>
+
+
+
     </div>
 
-    <!--News-->
-    <section class="dark:bg-gray-100 dark:text-gray-800">
-        <div class="container max-w p-6 mx-auto space-y-6 sm:space-y-12">
-            <a rel="noopener noreferrer" href="#"
-                class="block max-w-sm gap-3 mx-auto sm:max-w-full group hover:no-underline focus:no-underline lg:grid lg:grid-cols-12 dark:bg-gray-50">
-                <img src="https://source.unsplash.com/random/480x360" alt=""
-                    class="object-cover w-full h-64 rounded sm:h-96 lg:col-span-7 dark:bg-gray-500">
-                <div class="p-6 space-y-2 lg:col-span-5">
-                    <h3 class="text-2xl font-semibold sm:text-4xl group-hover:underline group-focus:underline">Noster
-                        tincidunt reprimique ad pro</h3>
-                    <span class="text-xs dark:text-gray-600">February 19, 2021</span>
-                    <p>Ei delenit sensibus liberavisse pri. Quod suscipit no nam. Est in graece fuisset, eos affert
-                        putent doctus id.</p>
-                </div>
-            </a>
-            <div class="grid justify-between grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <a rel="noopener noreferrer" href="#"
-                    class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
-                    <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
-                        src="https://source.unsplash.com/random/480x360?1">
-                    <div class="p-6 space-y-2">
-                        <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet
-                            repudiare legendos</h3>
-                        <span class="text-xs dark:text-gray-600">January 21, 2021</span>
-                        <p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit
-                            perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent
-                            delicata indoctum pri.</p>
-                    </div>
-                </a>
-                <a rel="noopener noreferrer" href="#"
-                    class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
-                    <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
-                        src="https://source.unsplash.com/random/480x360?2">
-                    <div class="p-6 space-y-2">
-                        <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet
-                            repudiare legendos</h3>
-                        <span class="text-xs dark:text-gray-600">January 22, 2021</span>
-                        <p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit
-                            perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent
-                            delicata indoctum pri.</p>
-                    </div>
-                </a>
-                <a rel="noopener noreferrer" href="#"
-                    class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50">
-                    <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
-                        src="https://source.unsplash.com/random/480x360?3">
-                    <div class="p-6 space-y-2">
-                        <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet
-                            repudiare legendos</h3>
-                        <span class="text-xs dark:text-gray-600">January 23, 2021</span>
-                        <p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit
-                            perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent
-                            delicata indoctum pri.</p>
-                    </div>
-                </a>
-                <a rel="noopener noreferrer" href="#"
-                    class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50 hidden sm:block">
-                    <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
-                        src="https://source.unsplash.com/random/480x360?4">
-                    <div class="p-6 space-y-2">
-                        <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet
-                            repudiare legendos</h3>
-                        <span class="text-xs dark:text-gray-600">January 24, 2021</span>
-                        <p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit
-                            perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent
-                            delicata indoctum pri.</p>
-                    </div>
-                </a>
-                <a rel="noopener noreferrer" href="#"
-                    class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50 hidden sm:block">
-                    <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
-                        src="https://source.unsplash.com/random/480x360?5">
-                    <div class="p-6 space-y-2">
-                        <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet
-                            repudiare legendos</h3>
-                        <span class="text-xs dark:text-gray-600">January 25, 2021</span>
-                        <p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit
-                            perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent
-                            delicata indoctum pri.</p>
-                    </div>
-                </a>
-                <a rel="noopener noreferrer" href="#"
-                    class="max-w-sm mx-auto group hover:no-underline focus:no-underline dark:bg-gray-50 hidden sm:block">
-                    <img role="presentation" class="object-cover w-full rounded h-44 dark:bg-gray-500"
-                        src="https://source.unsplash.com/random/480x360?6">
-                    <div class="p-6 space-y-2">
-                        <h3 class="text-2xl font-semibold group-hover:underline group-focus:underline">In usu laoreet
-                            repudiare legendos</h3>
-                        <span class="text-xs dark:text-gray-600">January 26, 2021</span>
-                        <p>Mei ex aliquid eleifend forensibus, quo ad dicta apeirian neglegentur, ex has tantas percipit
-                            perfecto. At per tempor albucius perfecto, ei probatus consulatu patrioque mea, ei vocent
-                            delicata indoctum pri.</p>
-                    </div>
-                </a>
-            </div>
-            <div class="flex justify-center">
-                <button type="button"
-                    class="px-6 py-3 text-sm rounded-md hover:underline dark:bg-gray-50 dark:text-gray-600">Load more
-                    posts...</button>
-            </div>
-        </div>
-    </section>
 
-    <script src="/javascript/news.js"></script>
+
+
+    <script src="/javascript/genre.js"></script>
 </body>
 
 </html>
