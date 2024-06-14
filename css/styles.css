@@ -64,3 +64,48 @@
 .relative-search-container {
     position: relative;
 }
+#search-results,
+#mobile-search-results {
+    background-color: #1F2937; /* Warna background sesuai dengan navbar */
+    color: white; /* Warna teks putih */
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    border-radius: 0.5rem; /* Rounded corners */
+    margin-top: 0.5rem; /* Space between input and dropdown */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Shadow for better visibility */
+}
+
+#search-results a,
+#mobile-search-results a {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: white;
+    text-decoration: none;
+}
+
+#search-results a:hover,
+#mobile-search-results a:hover {
+    background-color: #374151; /* Darker background on hover */
+}
+
+#search-results img,
+#mobile-search-results img {
+    margin-right: 0.5rem;
+    border-radius: 0.25rem; /* Rounded image corners */
+}
+
+@media (max-width: 768px) {
+    #search-results,
+    #mobile-search-results {
+    background-color: #1F2937; /* Warna background sesuai dengan navbar */
+    color: white; /* Warna teks putih */
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    border-radius: 0.5rem; /* Rounded corners */
+    margin-top: 5rem; /* Space between input and dropdown */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Shadow for better visibility */
+}
+}

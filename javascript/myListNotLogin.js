@@ -21,27 +21,30 @@ document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('search-input').addEventListener('input', function() {
                 const query = this.value.trim();
                 if (query.length > 2) {
-                    performSearch(query, 'search-results');
+                    performSearch(query);
                 } else {
-                    clearSearchResults('search-results');
+                    clearSearchResults();
                 }
             });
 
             document.getElementById('mobile-search-input').addEventListener('input', function() {
                 const query = this.value.trim();
                 if (query.length > 2) {
-                    performSearch(query, 'mobile-search-results');
+                    performSearch(query);
                 } else {
-                    clearSearchResults('mobile-search-results');
+                    clearSearchResults();
                 }
             });
 
-            function performSearch(query, resultContainerId) {
+            function performSearch(query) {
                 fetch(`https://api.jikan.moe/v4/anime?q=${query}&limit=10`)
                     .then(response => response.json())
                     .then(data => {
-                        const searchResults = document.getElementById(resultContainerId);
+                        const searchResults = document.getElementById('search-results');
+                        const mobileSearchResults = document.getElementById('mobile-search-results');
+                        
                         searchResults.innerHTML = ''; // Clear previous results
+                        mobileSearchResults.innerHTML = ''; // Clear previous results
 
                         data.data.forEach(anime => {
                             const resultItem = document.createElement('a');
@@ -52,55 +55,62 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <span>${anime.title}</span>
                             `;
                             searchResults.appendChild(resultItem);
+                            mobileSearchResults.appendChild(resultItem.cloneNode(true));
                         });
 
                         searchResults.classList.remove('hidden');
+                        mobileSearchResults.classList.remove('hidden');
                     })
                     .catch(error => {
                         console.error('Error fetching search results:', error);
                     });
             }
 
-            function clearSearchResults(resultContainerId) {
-                const searchResults = document.getElementById(resultContainerId);
+            function clearSearchResults() {
+                const searchResults = document.getElementById('search-results');
+                const mobileSearchResults = document.getElementById('mobile-search-results');
+
                 searchResults.innerHTML = '';
+                mobileSearchResults.innerHTML = '';
                 searchResults.classList.add('hidden');
+                mobileSearchResults.classList.add('hidden');
             }
+
+            updateUserEmail();
         });
 
-    // Fetching and displaying anime cards dynamically
-    fetchAnimeByGenre('Slice of Life', 'sol-cards', 'loading-sol-anime');
-    fetchAnimeByGenre('Isekai', 'isekai-cards', 'loading-isekai-anime');
-    fetchAnimeByGenre('Romance', 'romance-cards', 'loading-romance-anime');
-    fetchAnimeByGenre('Adventure', 'adventure-cards', 'loading-adventure-anime');
-    fetchAnimeByGenre('Horror', 'horror-cards', 'loading-horror-anime');
-    fetchAnimeByGenre('Sports', 'olahraga-cards', 'loading-olahraga-anime');
+    function getQueryParams() {
+        const params = {};
+        window.location.search.replace(/^\?/, '').split('&').forEach(param => {
+            const [key, value] = param.split('=');
+            params[key] = decodeURIComponent(value);
+        });
+        return params;
+    }
+
+    function updateUserEmail() {
+        const params = getQueryParams();
+        const email = params.email || localStorage.getItem('email');
+        const userEmailElement = document.getElementById('user-email');
+        const mobileUserEmailElement = document.getElementById('mobile-user-email');
+
+        if (email) {
+            localStorage.setItem('email', email);
+            if (userEmailElement) {
+                userEmailElement.textContent = email;
+                userEmailElement.setAttribute('data-email', 'true');
+            }
+            if (mobileUserEmailElement) {
+                mobileUserEmailElement.textContent = email;
+                mobileUserEmailElement.setAttribute('data-email', 'true');
+            }
+        } else {
+            if (userEmailElement) {
+                userEmailElement.setAttribute('data-email', 'false');
+            }
+            if (mobileUserEmailElement) {
+                mobileUserEmailElement.setAttribute('data-email', 'false');
+            }
+        }
+    }
 });
-
-function fetchAnimeByGenre(genre, containerId, loadingId) {
-    const loadingElement = document.getElementById(loadingId);
-    const cardsContainer = document.getElementById(containerId);
-
-    fetch(`https://api.jikan.moe/v4/anime?genres=${genre}&limit=8`)
-        .then(response => response.json())
-        .then(data => {
-            data.data.forEach(anime => {
-                const card = document.createElement('div');
-                card.classList.add('bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg');
-                card.innerHTML = `
-                    <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-xl font-semibold">${anime.title}</h3>
-                        <a href="detailAnimeNotLogin.html?id=${anime.mal_id}" class="mt-2 inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Learn More</a>
-                    </div>
-                `;
-                cardsContainer.appendChild(card);
-            });
-        })
-        .catch(error => {
-            console.error(`Error fetching ${genre} anime data:`, error);
-        })
-        .finally(() => {
-            loadingElement.style.display = 'none';
-        });
-}

@@ -7,139 +7,17 @@
     <title>Genre</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
-
-    <style>
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #4A5568;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-
 </head>
 
 <body class="bg-gray-900 text-white">
     <!-- Navbar -->
-    <nav class="bg-gray-800 p-4">
-        <div class="container-md mx-4 mx-md-8 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center">
-                    <img src="/images/logo.png" alt="Logo" class="h-20 w-15"> <!-- Larger logo -->
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-3xl font-semibold">My Anime List</span>
-                    <span class="text-sm text-center">AnimeRating</span>
-                </div>
-            </div>
-            <div class="hidden lg:flex items-center space-x-4 relative">
-                <input id="search-input" type="text" placeholder="Search"
-                    class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg">
-                <!-- Placeholder text lebih besar -->
-                <div id="search-results"
-                    class="absolute bg-white text-black rounded w-full mt-12 max-h-96 overflow-y-auto hidden"></div>
-                <a id="home-link" href="#" class="text-white hover:text-gray-400 text-lg">Home</a>
-
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        // Ambil elemen link Home
-                        var homeLink = document.getElementById('home-link');
-                        // Ambil elemen user-email
-                        var userEmail = document.getElementById('user-email');
-
-                        // Status email
-                        var hasEmail = userEmail.innerText.trim();
-
-                        // Jika ada email, arahkan ke homeLogin.html, jika tidak, arahkan ke index.html
-                        homeLink.href = hasEmail ? "../html/homeLogin.html" : "../index.html";
-                    });
-                </script>
-                <span class="text-gray-400 hover:text-gray-500 text-lg cursor-pointer">Genre</span>
-                <a href="/html/myList.html" class="text-white hover:text-gray-400 text-lg">My List</a>
-
-                <!-- Bagian email dan sign in navbar-->
-                <div class="relative group">
-                    <span id="user-email" class="hover-email text-white text-lg"></span>
-                    <!-- Menampilkan email sebagai teks -->
-                    <div
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <a id="profile-link" href="/html/profile.html"
-                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100 hidden">Profile</a>
-                        <a id="logout-link" href="../html/login.html"
-                            class="block px-4 py-2 text-gray-800 hover:bg-gray-100 hidden">Logout</a>
-                    </div>
-                </div>
-                <a id="sign-in-link" href="/html/login.html"
-                    class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a>
-
-                <!-- Script untuk mengatur tampilan berdasarkan data email -->
-                <script>
-                    // Setelah pengguna berhasil login
-                    const email = localStorage.getItem('email');
-                    if (email) {
-                        // Tampilkan email pada navbar atau di mana pun Anda ingin menampilkannya
-                        document.getElementById('user-email').textContent = email;
-                        // Tampilkan menu Profile dan Logout
-                        document.getElementById('profile-link').classList.remove('hidden');
-                        document.getElementById('logout-link').classList.remove('hidden');
-                        // Sembunyikan tombol Sign In
-                        document.getElementById('sign-in-link').classList.add('hidden');
-                    }
-                </script>
-
-
-
-
-
-            </div>
-            <div class="lg:hidden flex items-center">
-                <button id="menu-button" class="text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div id="mobile-menu"
-            class="md:hidden hidden overflow-hidden max-h-0 transition-max-height duration-300 ease-out">
-            <div class="flex flex-col space-y-2 mt-2">
-                <input id="mobile-search-input" type="text" placeholder="Search"
-                    class="bg-gray-700 text-white rounded px-3 py-2 focus:outline-none text-lg">
-                <!-- Placeholder text lebih besar -->
-                <a href="../html/homeLogin.html" class="text-white hover:text-gray-400 text-lg">Home</a>
-                <span class="text-gray-400 hover:text-gray-500 text-lg cursor-pointer">Genre</span>
-                <a href="/html/myList.html" class="text-white hover:text-gray-400 text-lg">My List</a>
-                <a id="sign-in-link" href="/html/login.html"
-                    class="bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 text-lg">Sign In</a>
-                <div id="user-email-container" class="hidden relative group">
-                    <span id="user-email" class="hover-email text-white text-lg"></span>
-                    <div
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
+    <div id="navbar-container"></div>
 
     <!--COMPONENT-->
 
     <!-- Tata Letak Kartu -->
     <div class="container mx-auto p-4">
         <h1 class="text-4xl text-center font-bold m-4 ">Genre</h1>
-
 
         <h2 class="text-2xl font-bold m-4">Slice of Life</h2>
         <div class="overflow-x-auto py-4">
@@ -223,13 +101,7 @@
         <div id="loading-olahraga-anime" class="flex justify-center items-center h-24">
             <div class="spinner"></div>
         </div>
-
-
-
     </div>
-
-
-
 
     <script src="/javascript/genre.js"></script>
 </body>
