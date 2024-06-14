@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const loader = document.getElementById('loader');
     loader.style.display = 'flex';
 
+    // Sembunyikan tombol edit review pada awalnya
+    const editReviewButton = document.getElementById('edit-review-button');
+    editReviewButton.style.display = 'none';
+
     fetch('https://mylistanime-api.vercel.app/animes', {
         method: 'GET',
         headers: {
@@ -23,8 +27,18 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(animes => {
         console.log('Anime list fetched:', animes);
         const animeListContainer = document.getElementById('anime-list');
+        const noReviewsMessage = document.getElementById('no-reviews');
+
         // Hide loader
         loader.style.display = 'none';
+
+        if (animes.length === 0) {
+            noReviewsMessage.classList.remove('hidden');
+            editReviewButton.style.display = 'none'; // Hide edit review button if no reviews
+        } else {
+            noReviewsMessage.classList.add('hidden');
+            editReviewButton.style.display = 'block'; // Show edit review button if there are reviews
+        }
 
         animes.forEach(anime => {
             const card = document.createElement('div');
@@ -60,31 +74,88 @@ document.addEventListener('DOMContentLoaded', function() {
         return params;
     }
 
-    // Function to update user email in the navbar
-    function updateUserEmail() {
+    // Function to update user username in the navbar
+    function updateUserUsername() {
         const params = getQueryParams();
-        const email = params.email || localStorage.getItem('email');
-        if (email) {
-            localStorage.setItem('email', email); // Save email to localStorage
-            const userEmailElement = document.getElementById('user-email');
-            const mobileUserEmailElement = document.getElementById('mobile-user-email');
-            userEmailElement.textContent = email;
-            mobileUserEmailElement.textContent = email;
+        const username = params.username || localStorage.getItem('username');
+        if (username) {
+            localStorage.setItem('username', username); // Save username to localStorage
+            const userUsernameElement = document.getElementById('user-username');
+            const mobileUserUsernameElement = document.getElementById('mobile-user-username');
+            userUsernameElement.textContent = username;
+            mobileUserUsernameElement.textContent = username;
         }
     }
 
-    updateUserEmail();
-});
+    // Memuat navbar dari komponen HTML eksternal
+    fetch('/html/layout/NavbarLogin.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar-container').innerHTML = data;
 
-document.getElementById('menu-button').addEventListener('click', function() {
-    var menu = document.getElementById('mobile-menu');
-    if (menu.classList.contains('hidden')) {
-        menu.classList.remove('hidden');
-        menu.style.maxHeight = menu.scrollHeight + 'px';
-    } else {
-        menu.style.maxHeight = '0';
-        menu.addEventListener('transitionend', function() {
-            menu.classList.add('hidden');
-        }, { once: true });
-    }
+            // Inisialisasi ulang event listener yang diperlukan
+            document.getElementById('menu-button').addEventListener('click', function() {
+                var menu = document.getElementById('mobile-menu');
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    menu.style.maxHeight = menu.scrollHeight + 'px';
+                } else {
+                    menu.style.maxHeight = '0';
+                    menu.addEventListener('transitionend', function() {
+                        menu.classList.add('hidden');
+                    }, { once: true });
+                }
+            });
+
+            document.getElementById('search-input').addEventListener('input', function() {
+                const query = this.value.trim();
+                if (query.length > 2) {
+                    performSearch(query, 'search-results');
+                } else {
+                    clearSearchResults('search-results');
+                }
+            });
+
+            document.getElementById('mobile-search-input').addEventListener('input', function() {
+                const query = this.value.trim();
+                if (query.length > 2) {
+                    performSearch(query, 'mobile-search-results');
+                } else {
+                    clearSearchResults('mobile-search-results');
+                }
+            });
+
+            function performSearch(query, resultContainerId) {
+                fetch(`https://api.jikan.moe/v4/anime?q=${query}&limit=10`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const searchResults = document.getElementById(resultContainerId);
+                        searchResults.innerHTML = ''; // Hapus hasil sebelumnya
+
+                        data.data.forEach(anime => {
+                            const resultItem = document.createElement('a');
+                            resultItem.href = `/html/detailAnime.html?id=${anime.mal_id}&username=${localStorage.getItem('username')}`;
+                            resultItem.classList.add('p-2', 'hover:bg-gray-200', 'cursor-pointer', 'flex', 'items-center');
+                            resultItem.innerHTML = `
+                                <img src="${anime.images.webp.image_url}" alt="${anime.title}" class="w-12 h-12 object-cover inline-block mr-2">
+                                <span>${anime.title}</span>
+                            `;
+                            searchResults.appendChild(resultItem);
+                        });
+
+                        searchResults.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching search results:', error);
+                    });
+            }
+
+            function clearSearchResults(resultContainerId) {
+                const searchResults = document.getElementById(resultContainerId);
+                searchResults.innerHTML = '';
+                searchResults.classList.add('hidden');
+            }
+
+            updateUserUsername();
+        });
 });

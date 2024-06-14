@@ -29,10 +29,12 @@ document.getElementById('login-form').addEventListener('submit', async function(
         const result = await response.json();
 
         if (response.ok && !result.error) {
-            // Simpan token dan email ke localStorage
+            // Simpan token, email, dan username ke localStorage
             const token = result.loginResult.token;
+            const username = result.loginResult.username; // Pastikan API mengembalikan username
             localStorage.setItem('auth_token', token);
             localStorage.setItem('email', email); // Simpan email ke localStorage
+            localStorage.setItem('username', username); // Simpan username ke localStorage
 
             // Redirect ke homeLogin.html
             Swal.fire({
@@ -42,7 +44,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
                 timer: 2000,
                 showConfirmButton: false
             }).then(() => {
-                window.location.href = `../html/homeLogin.html?email=${encodeURIComponent(email)}`;
+                window.location.href = `../html/homeLogin.html?username=${encodeURIComponent(username)}`;
             });
         } else {
             Swal.fire({
