@@ -108,7 +108,7 @@ async function fetchLatestAnime() {
     const latestCardsContainer = document.getElementById('latest-cards');
     
     try {
-        const response = await fetch('https://api.jikan.moe/v4/anime?q=LATEST&sfw');
+        const response = await fetch('https://api.jikan.moe/v4/seasons/2024/summer');
         const data = await response.json();
         const latest8Anime = data.data.slice(0, 8);
 
