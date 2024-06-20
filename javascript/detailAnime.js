@@ -69,6 +69,12 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchAnimeDetails();
         });
 
+    fetch('/html/footer/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+        });
+
     const params = new URLSearchParams(window.location.search);
     const animeId = params.get('id');
     const username = params.get('username');
@@ -82,8 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
             mobileUserUsernameElement.textContent = username;
         }
     }
-
-
 
     if (!animeId) {
         console.error('No anime ID found in URL');

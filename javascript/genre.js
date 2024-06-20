@@ -1,48 +1,57 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Load Navbar
+    // Memuat Navbar
     fetch('/html/layout/NavbarNotLogin.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('navbar-container').innerHTML = data;
 
-            // Add event listeners for the navbar
-            document.getElementById('menu-button').addEventListener('click', function() {
-                var menu = document.getElementById('mobile-menu');
-                if (menu.classList.contains('hidden')) {
-                    menu.classList.remove('hidden');
-                    menu.style.maxHeight = menu.scrollHeight + 'px';
-                } else {
-                    menu.style.maxHeight = '0';
-                    menu.addEventListener('transitionend', function() {
-                        menu.classList.add('hidden');
-                    }, { once: true });
-                }
-            });
+            // Menambahkan event listener untuk navbar
+            const menuButton = document.getElementById('menu-button');
+            if (menuButton) {
+                menuButton.addEventListener('click', function() {
+                    var menu = document.getElementById('mobile-menu');
+                    if (menu.classList.contains('hidden')) {
+                        menu.classList.remove('hidden');
+                        menu.style.maxHeight = menu.scrollHeight + 'px';
+                    } else {
+                        menu.style.maxHeight = '0';
+                        menu.addEventListener('transitionend', function() {
+                            menu.classList.add('hidden');
+                        }, { once: true });
+                    }
+                });
+            }
 
-            document.getElementById('search-input').addEventListener('input', function() {
-                const query = this.value.trim();
-                if (query.length > 2) {
-                    performSearch(query, 'search-results');
-                } else {
-                    clearSearchResults('search-results');
-                }
-            });
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
+                    if (query.length > 2) {
+                        performSearch(query, 'search-results');
+                    } else {
+                        clearSearchResults('search-results');
+                    }
+                });
+            }
 
-            document.getElementById('mobile-search-input').addEventListener('input', function() {
-                const query = this.value.trim();
-                if (query.length > 2) {
-                    performSearch(query, 'mobile-search-results');
-                } else {
-                    clearSearchResults('mobile-search-results');
-                }
-            });
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            if (mobileSearchInput) {
+                mobileSearchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
+                    if (query.length > 2) {
+                        performSearch(query, 'mobile-search-results');
+                    } else {
+                        clearSearchResults('mobile-search-results');
+                    }
+                });
+            }
 
             function performSearch(query, resultContainerId) {
                 fetch(`https://api.jikan.moe/v4/anime?q=${query}&limit=10`)
                     .then(response => response.json())
                     .then(data => {
                         const searchResults = document.getElementById(resultContainerId);
-                        searchResults.innerHTML = ''; // Clear previous results
+                        searchResults.innerHTML = ''; // Bersihkan hasil sebelumnya
 
                         data.data.forEach(anime => {
                             const resultItem = document.createElement('a');
@@ -69,19 +78,23 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-    // Fetch genres and display them
+    // Memuat Footer
+    fetch('/html/footer/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-container').innerHTML = data;
+        });
+
+    // Memuat genre dan menampilkannya
     fetchGenres();
 
-    // Fetch and display all anime from all genres on page load
-    fetchAllAnime();
-
-    // Function to fetch genres
+    // Fungsi untuk memuat genre
     function fetchGenres() {
         fetch('https://api.jikan.moe/v4/genres/anime')
             .then(response => response.json())
             .then(data => {
                 const genreContainer = document.getElementById('genre-container');
-                genreContainer.innerHTML = ''; // Clear previous results
+                genreContainer.innerHTML = ''; // Bersihkan hasil sebelumnya
 
                 const selectedGenres = [
                     1,   // Action
@@ -106,15 +119,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 data.data.forEach(genre => {
                     if (selectedGenres.includes(genre.mal_id)) {
                         const genreItem = document.createElement('div');
-                        genreItem.classList.add('genre-category');
-                        genreItem.id = genre.mal_id;
+                        genreItem.classList.add('genre-category', 'cursor-pointer', 'hover:bg-gray-700', 'p-2', 'rounded');
+                        genreItem.id = `genre-${genre.mal_id}`;
                         genreItem.textContent = genre.name;
                         genreContainer.appendChild(genreItem);
 
-                        // Add click event listener to fetch anime by genre
+                        // Menambahkan event listener untuk memuat anime berdasarkan genre
                         genreItem.addEventListener('click', function() {
                             fetchAnimeByGenre(genre.mal_id, genre.name);
                         });
+
+                        console.log(`Genre item created: ${genre.name} with ID: genre-${genre.mal_id}`);
                     }
                 });
             })
@@ -123,15 +138,17 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    // Fetch Anime by Genre
+    // Memuat Anime berdasarkan Genre
     function fetchAnimeByGenre(genreId, genreName) {
-        document.getElementById('loading-spinner').classList.remove('hidden');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        loadingSpinner.classList.remove('hidden');
+        document.getElementById('anime-prompt').classList.add('hidden'); // Sembunyikan pesan prompt
 
         fetch(`https://api.jikan.moe/v4/anime?genres=${genreId}&order_by=popularity`)
             .then(response => response.json())
             .then(data => {
                 const animeContainer = document.getElementById('anime-container');
-                animeContainer.innerHTML = ''; // Clear previous results
+                animeContainer.innerHTML = ''; // Bersihkan hasil sebelumnya
 
                 data.data.forEach(anime => {
                     const animeItem = document.createElement('div');
@@ -149,19 +166,30 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 document.getElementById('selected-genre').textContent = `> ${genreName}`;
-                document.getElementById('loading-spinner').classList.add('hidden');
+                loadingSpinner.classList.add('hidden');
 
-                // Remove active class from all genre items
+                // Hapus kelas aktif dari semua item genre
                 document.querySelectorAll('.genre-category').forEach(item => {
                     item.classList.remove('active');
                 });
 
-                // Add active class to the selected genre item
-                document.getElementById(genreId).classList.add('active');
+                // Tambahkan kelas aktif ke item genre yang dipilih
+                const selectedGenreItem = document.getElementById(`genre-${genreId}`);
+                if (selectedGenreItem) {
+                    selectedGenreItem.classList.add('active');
+                }
             })
             .catch(error => {
                 console.error('Error fetching anime:', error);
-                document.getElementById('loading-spinner').classList.add('hidden');
+                loadingSpinner.classList.add('hidden');
             });
+    }
+
+    // Memuat semua anime dari semua genre saat halaman dimuat
+    fetchAllAnime();
+
+    function fetchAllAnime() {
+        document.getElementById('anime-prompt').classList.remove('hidden'); // Tampilkan pesan prompt
+        // Logika tambahan untuk memuat semua anime dapat ditambahkan di sini
     }
 });

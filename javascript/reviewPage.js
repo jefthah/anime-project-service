@@ -77,6 +77,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       updateUserUsername();
     });
 
+  fetch('/html/footer/footer.html')
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById('footer-container').innerHTML = data;
+      });
+
   const params = new URLSearchParams(window.location.search);
   const animeId = params.get("id");
   const username = params.get("username") || localStorage.getItem("username");
