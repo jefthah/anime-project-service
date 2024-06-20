@@ -83,15 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    if (username) {
-        localStorage.setItem('username', username);
-        document.getElementById('home-link').href = `homeLogin.html?username=${username}`;
-    } else {
-        const storedUsername = localStorage.getItem('username');
-        if (storedUsername) {
-            document.getElementById('home-link').href = `homeLogin.html?username=${storedUsername}`;
-        }
-    }
+
 
     if (!animeId) {
         console.error('No anime ID found in URL');

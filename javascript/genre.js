@@ -123,81 +123,11 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    function fetchAllAnime() {
-        document.getElementById('loading-spinner').classList.remove('hidden');
-        
-        // Fetch anime from selected genres to avoid too many requests
-        const selectedGenres = [
-            1,   // Action
-            2,   // Adventure
-            5,   // Avant Garde
-            46,  // Award Winning
-            28,  // Boys Love
-            4,   // Comedy
-            8,   // Drama
-            10,  // Fantasy
-            26,  // Girls Love
-            14,  // Horror
-            7,   // Mystery
-            22,  // Romance
-            24,  // Sci-Fi
-            36,  // Slice of Life
-            30,  // Sports
-            37,  // Supernatural
-            41   // Suspense
-        ];
-
-        let allAnime = [];
-        let delay = 500; // 500ms delay between requests
-        let promises = selectedGenres.map((genre, index) => 
-            new Promise((resolve) => 
-                setTimeout(() => 
-                    fetch(`https://api.jikan.moe/v4/anime?genres=${genre}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            allAnime = allAnime.concat(data.data);
-                            resolve();
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching ${genre}:`, error);
-                            resolve();
-                        }), index * delay)
-            )
-        );
-
-        Promise.all(promises)
-            .then(() => {
-                const animeContainer = document.getElementById('anime-container');
-                animeContainer.innerHTML = ''; // Clear previous results
-
-                allAnime.forEach(anime => {
-                    const animeItem = document.createElement('div');
-                    animeItem.classList.add('anime-item', 'bg-gray-800', 'rounded-lg', 'overflow-hidden', 'shadow-lg', 'text-white');
-                    animeItem.innerHTML = `
-                        <img src="${anime.images.webp?.image_url}" alt="${anime.title}" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-bold mt-2">${anime.title}</h3>
-                            <p class="text-gray-400">Rating: ${anime.score || 'N/A'}</p>
-                            <p class="text-gray-400">Year: ${anime.year || 'N/A'}</p>
-                            <button class="mt-2 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700" onclick="window.location.href='/html/Guest/detailAnimeNotLogin.html?id=${anime.mal_id}&email=${localStorage.getItem('email')}'">Learn More</button>
-                        </div>
-                    `;
-                    animeContainer.appendChild(animeItem);
-                });
-
-                document.getElementById('loading-spinner').classList.add('hidden');
-            })
-            .catch(error => {
-                console.error('Error fetching anime:', error);
-                document.getElementById('loading-spinner').classList.add('hidden');
-            });
-    }
-
     // Fetch Anime by Genre
     function fetchAnimeByGenre(genreId, genreName) {
         document.getElementById('loading-spinner').classList.remove('hidden');
 
-        fetch(`https://api.jikan.moe/v4/anime?genres=${genreId}`)
+        fetch(`https://api.jikan.moe/v4/anime?genres=${genreId}&order_by=popularity`)
             .then(response => response.json())
             .then(data => {
                 const animeContainer = document.getElementById('anime-container');

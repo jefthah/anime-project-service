@@ -74,14 +74,6 @@ document.addEventListener("DOMContentLoaded", function() {
     fetchLatestReviews();
 });
 
-function getQueryParams() {
-    const params = {};
-    window.location.search.replace(/^\?/, '').split('&').forEach(param => {
-        const [key, value] = param.split('=');
-        params[key] = decodeURIComponent(value);
-    });
-    return params;
-}
 
 async function fetchTopAnime() {
     const loadingElement = document.getElementById('loading-top-anime');
